@@ -14,8 +14,10 @@ import Image from "next/image";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import DatePicker from "react-datepicker";
-
 import "react-datepicker/dist/react-datepicker.css";
+import { Select, SelectContent, SelectValue, SelectTrigger } from "./ui/select";
+import { Textarea } from "./ui/textarea";
+import { Checkbox } from "./ui/checkbox";
 
 interface CustomProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,7 +37,16 @@ interface CustomProps {
 }
 
 const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
-  const { fieldType, iconAlt, iconSrc, placeHolder, disabled } = props;
+  const {
+    fieldType,
+    iconAlt,
+    iconSrc,
+    placeHolder,
+    disabled,
+    showTimeSelect,
+    dateFormat,
+    renderSkeleton,
+  } = props;
 
   switch (fieldType) {
     case FieldTypes.INPUT:
@@ -90,10 +101,59 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
             <DatePicker
               selected={field.value}
               onChange={(date) => field.onChange(date)}
+              dateFormat={dateFormat ?? "MM/dd/yyyy"}
+              showTimeSelect={showTimeSelect ?? false}
+              timeInputLabel="Time: "
+              wrapperClassName="date-picker"
             />
           </FormControl>
         </div>
       );
+    case FieldTypes.SKELETON:
+      return renderSkeleton ? renderSkeleton(field) : null;
+    case FieldTypes.SELECT:
+      return (
+        <FormControl>
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <FormControl>
+              <SelectTrigger className="shad-select-trigger">
+                <SelectValue placeholder={placeHolder} />
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent className="shad-select-content">
+              {props.children}
+            </SelectContent>
+          </Select>
+        </FormControl>
+      );
+    case FieldTypes.TEXTAREA:
+      return (
+        <FormControl>
+          <Textarea
+            placeholder={placeHolder}
+            {...field}
+            className="shad-textArea"
+            disabled={props.disabled}
+          />
+        </FormControl>
+      );
+
+    case FieldTypes.CHECKBOX:
+      return (
+        <FormControl>
+          <div className="flex items-center gap-4 select-none">
+            <Checkbox
+              id={props.name}
+              checked={field.value}
+              onCheckedChange={field.onChange}
+            />
+            <label htmlFor={props.name} className="checkbox-label">
+              {props.label}
+            </label>
+          </div>
+        </FormControl>
+      );
+
     default:
       break;
   }

@@ -13,6 +13,9 @@ import { FieldTypes } from "./forms/PatientForm";
 import Image from "next/image";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 interface CustomProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -72,6 +75,24 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
             className="input-phone"
           />
         </FormControl>
+      );
+    case FieldTypes.DATE_PICKER:
+      return (
+        <div className="flex rounded-md border-dark-500 bg-dark-400">
+          <Image
+            src="/assets/icons/calendar.svg"
+            alt="calendar"
+            width={24}
+            height={24}
+            className="ml-2"
+          />
+          <FormControl>
+            <DatePicker
+              selected={field.value}
+              onChange={(date) => field.onChange(date)}
+            />
+          </FormControl>
+        </div>
       );
     default:
       break;

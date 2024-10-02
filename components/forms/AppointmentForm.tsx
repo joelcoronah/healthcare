@@ -94,7 +94,6 @@ const AppointmentForm = ({
         };
         const appointment = await createAppointment(appointmentData);
 
-        console.log({ appointment });
         if (appointment) {
           form.reset();
           router.push(

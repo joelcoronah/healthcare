@@ -49,7 +49,6 @@ const RegisterForm = ({ user }: { user: User }) => {
   async function onSubmit(values: z.infer<typeof PatientFormValidation>) {
     setIsLoading(true);
     let formData;
-    console.log({ values });
 
     if (
       values.identificationDocument &&
@@ -71,13 +70,9 @@ const RegisterForm = ({ user }: { user: User }) => {
       // @ts-ignore
       const patient = await registerPatient(patientData);
 
-      console.log({ patient });
-      setIsLoading(false);
-
       if (patient) router.push(`/patients/${user.$id}/new-appointment`);
     } catch (error) {
       setIsLoading(false);
-
       console.log(error);
     }
   }
@@ -339,8 +334,7 @@ const RegisterForm = ({ user }: { user: User }) => {
           label="I consent to the processing of my personal information"
           control={form.control}
         />
-
-        <SubmitButton isLoading={isLoading}>Get Startedxxxxxx</SubmitButton>
+        <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
       </form>
     </Form>
   );
